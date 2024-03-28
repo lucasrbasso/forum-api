@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "name": "Lucas Basso",
-  "email": "lucas@basso.com",
+  "email": "lucasr@basso.com",
   "password": "1234567"
 }
 
@@ -19,8 +19,8 @@ Content-Type: application/json
 X-correlation-id: 'oiajdoiawjdiajd
 
 {
-  "email": "lucas@basso.com",
-  "password": "12345678"
+  "email": "lucasr@basso.com",
+  "password": "1234567"
 }
 
 ###
@@ -32,6 +32,18 @@ Authorization: Bearer {{authToken}}
 
 {
   "title": "Nova pergunta",
+  "content": "Conteúdo teste"
+}
+
+###
+
+# @name edit_question
+PUT {{baseUrl}}/questions/123736ae-55fe-436d-a692-4893da4615d8
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Nova pergunta atualizada",
   "content": "Conteúdo teste"
 }
 

@@ -24,42 +24,81 @@ model User {
   answers      Answer[]
   comment      Comment[]
   notification Notification[]
+  tableAudit   UsersAudit[]
 
   @@map("users")
 }
 
+model UsersAudit {
+  id               Int      @id @default(autoincrement())
+  versionOperation String   @map("version_operation")
+  versionTableId   String?  @map("version_table_id")
+  versionTimestamp DateTime @map("version_timestamp")
+  oldData          Json?    @map("old_data")
+  newData          Json?    @map("new_data")
+  Table            User?    @relation(fields: [versionTableId], references: [id])
+
+  @@map("users_audit")
+}
+
 model Question {
-  id           String       @id @default(uuid())
-  title        String
-  slug         String       @unique
-  content      String
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime?    @updatedAt @map("updated_at")
-  authorId     String       @map("author_id")
-  bestAnswerId String?      @unique @map("best_answer_id")
-  author       User         @relation(fields: [authorId], references: [id])
-  bestAnswer   Answer?      @relation("bestAnswer", fields: [bestAnswerId], references: [id])
-  answers      Answer[]
-  comments     Comment[]
-  attachments  Attachment[]
+  id             String           @id @default(uuid())
+  title          String
+  slug           String           @unique
+  content        String
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime?        @updatedAt @map("updated_at")
+  authorId       String           @map("author_id")
+  bestAnswerId   String?          @unique @map("best_answer_id")
+  author         User             @relation(fields: [authorId], references: [id])
+  bestAnswer     Answer?          @relation("bestAnswer", fields: [bestAnswerId], references: [id])
+  answers        Answer[]
+  comments       Comment[]
+  attachments    Attachment[]
+  QuestionsAudit QuestionsAudit[]
 
   @@map("questions")
 }
 
+model QuestionsAudit {
+  id               Int       @id @default(autoincrement())
+  versionOperation String    @map("version_operation")
+  versionTableId   String?   @map("version_table_id")
+  versionTimestamp DateTime  @map("version_timestamp")
+  oldData          Json?     @map("old_data")
+  newData          Json?     @map("new_data")
+  Table            Question? @relation(fields: [versionTableId], references: [id])
+
+  @@map("questions_audit")
+}
+
 model Answer {
-  id           String       @id @default(uuid())
+  id           String         @id @default(uuid())
   content      String
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime?    @updatedAt @map("updated_at")
-  authorId     String       @map("author_id")
-  questionId   String       @map("question_id")
-  author       User         @relation(fields: [authorId], references: [id])
-  bestAnswerOn Question?    @relation("bestAnswer")
-  question     Question     @relation(fields: [questionId], references: [id])
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime?      @updatedAt @map("updated_at")
+  authorId     String         @map("author_id")
+  questionId   String         @map("question_id")
+  author       User           @relation(fields: [authorId], references: [id])
+  bestAnswerOn Question?      @relation("bestAnswer")
+  question     Question       @relation(fields: [questionId], references: [id])
   comments     Comment[]
   attachments  Attachment[]
+  AnswersAudit AnswersAudit[]
 
   @@map("answers")
+}
+
+model AnswersAudit {
+  id               Int      @id @default(autoincrement())
+  versionOperation String   @map("version_operation")
+  versionTableId   String?  @map("version_table_id")
+  versionTimestamp DateTime @map("version_timestamp")
+  oldData          Json?    @map("old_data")
+  newData          Json?    @map("new_data")
+  Table            Answer?  @relation(fields: [versionTableId], references: [id])
+
+  @@map("answers_audit")
 }
 
 model Comment {
